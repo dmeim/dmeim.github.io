@@ -1,51 +1,119 @@
 class ThemeManager {
     constructor() {
+        this.debug = true; // Enable debug logging
+        this.log('ThemeManager initializing...');
         this.theme = this.getInitialTheme();
         this.init();
     }
 
+    log(message, ...args) {
+        if (this.debug) {
+            console.log(`[ThemeManager] ${message}`, ...args);
+        }
+    }
+
     getInitialTheme() {
         const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            return savedTheme;
-        }
+        const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const initialTheme = savedTheme || (systemDark ? 'dark' : 'light');
         
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        this.log('Initial theme detection:', {
+            savedTheme,
+            systemDark,
+            initialTheme
+        });
+        
+        return initialTheme;
     }
 
     init() {
+        this.log('Initializing theme system...');
         this.applyTheme(this.theme);
         this.setupToggle();
         this.setupMediaQuery();
+        
+        // Make ThemeManager globally accessible for debugging
+        window.themeManager = this;
     }
 
     applyTheme(theme) {
+        this.log(`Applying theme: ${theme}`);
         this.theme = theme;
+        
+        // Apply theme to document
         document.documentElement.setAttribute('data-theme', theme);
+        document.body.setAttribute('data-theme', theme); // Backup for specificity
+        
+        // Save to localStorage
         localStorage.setItem('theme', theme);
+        
+        // Update icon
         this.updateToggleIcon();
+        
+        this.log(`Theme applied successfully. Document data-theme: ${document.documentElement.getAttribute('data-theme')}`);
     }
 
     updateToggleIcon() {
         const themeIcon = document.querySelector('.theme-icon');
+        const newIcon = this.theme === 'dark' ? '☀️' : '🌙';
+        
         if (themeIcon) {
-            themeIcon.textContent = this.theme === 'dark' ? '☀️' : '🌙';
+            themeIcon.textContent = newIcon;
+            this.log(`Updated toggle icon to: ${newIcon}`);
+        } else {
+            this.log('ERROR: Could not find .theme-icon element');
         }
     }
 
     setupToggle() {
-        const themeToggle = document.getElementById('theme-toggle');
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => {
-                this.toggleTheme();
-            });
-        }
+        this.log('Setting up theme toggle...');
+        
+        // Try multiple times to ensure element exists
+        const attemptSetup = (attempts = 0) => {
+            const themeToggle = document.getElementById('theme-toggle');
+            
+            if (themeToggle) {
+                this.log('Theme toggle button found, adding event listener');
+                
+                // Remove any existing listeners
+                themeToggle.removeEventListener('click', this.handleToggleClick);
+                
+                // Add new listener with proper binding
+                this.handleToggleClick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.log('Theme toggle clicked!');
+                    this.toggleTheme();
+                };
+                
+                themeToggle.addEventListener('click', this.handleToggleClick);
+                this.log('Event listener attached successfully');
+                
+                return true;
+            } else {
+                this.log(`Attempt ${attempts + 1}: Theme toggle button not found`);
+                
+                if (attempts < 5) {
+                    // Retry after a short delay
+                    setTimeout(() => attemptSetup(attempts + 1), 100);
+                } else {
+                    this.log('ERROR: Failed to find theme toggle button after 5 attempts');
+                }
+                
+                return false;
+            }
+        };
+        
+        attemptSetup();
     }
 
     setupMediaQuery() {
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        this.log('Setting up media query listener for system theme changes');
+        
         mediaQuery.addEventListener('change', (e) => {
             if (!localStorage.getItem('theme')) {
+                this.log('System theme changed, updating theme:', e.matches ? 'dark' : 'light');
                 this.applyTheme(e.matches ? 'dark' : 'light');
             }
         });
@@ -53,7 +121,25 @@ class ThemeManager {
 
     toggleTheme() {
         const newTheme = this.theme === 'dark' ? 'light' : 'dark';
+        this.log(`Toggling theme from ${this.theme} to ${newTheme}`);
         this.applyTheme(newTheme);
+    }
+
+    // Public method for manual testing
+    setTheme(theme) {
+        if (theme === 'dark' || theme === 'light') {
+            this.log(`Manually setting theme to: ${theme}`);
+            this.applyTheme(theme);
+        } else {
+            this.log(`Invalid theme: ${theme}. Use 'light' or 'dark'`);
+        }
+    }
+
+    // Reinitialize if needed (called after router setup)
+    reinitialize() {
+        this.log('Reinitializing theme manager...');
+        this.setupToggle();
+        this.updateToggleIcon();
     }
 }
 
@@ -280,8 +366,23 @@ class Router {
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new ThemeManager();
-    new Router();
+    console.log('[App] Initializing application...');
+    
+    // Initialize theme manager first
+    const themeManager = new ThemeManager();
+    
+    // Initialize router
+    const router = new Router();
+    
+    // Failsafe: Re-initialize theme manager after router setup
+    setTimeout(() => {
+        console.log('[App] Running failsafe theme manager re-initialization...');
+        themeManager.reinitialize();
+    }, 500);
+    
+    // Make both globally accessible for debugging
+    window.router = router;
+    console.log('[App] Application initialized. Global objects: window.themeManager, window.router');
 });
 
 // Add smooth scrolling for any internal links

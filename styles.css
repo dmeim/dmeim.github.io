@@ -11,7 +11,9 @@
     --transition: all 0.3s ease;
 }
 
-[data-theme="dark"] {
+/* Dark theme styles with higher specificity */
+html[data-theme="dark"],
+body[data-theme="dark"] {
     --bg-color: #0f172a;
     --text-color: #f1f5f9;
     --text-secondary: #94a3b8;
@@ -19,6 +21,51 @@
     --card-bg: #1e293b;
     --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3);
+}
+
+/* Force dark theme on body for additional specificity */
+body[data-theme="dark"] {
+    background-color: var(--bg-color) !important;
+    color: var(--text-color) !important;
+}
+
+/* Ensure navbar gets dark theme */
+html[data-theme="dark"] .navbar,
+body[data-theme="dark"] .navbar {
+    background-color: var(--bg-color);
+    border-bottom-color: var(--border-color);
+}
+
+/* Ensure cards get dark theme */
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .profile-card,
+html[data-theme="dark"] .tool-card,
+body[data-theme="dark"] .card,
+body[data-theme="dark"] .profile-card,
+body[data-theme="dark"] .tool-card {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+/* Ensure footer gets dark theme */
+html[data-theme="dark"] .footer,
+body[data-theme="dark"] .footer {
+    background-color: var(--card-bg);
+    border-top-color: var(--border-color);
+}
+
+/* Theme toggle button styling for both themes */
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+html[data-theme="dark"] .theme-toggle,
+body[data-theme="dark"] .theme-toggle {
+    border-color: var(--border-color);
+    color: var(--text-color);
 }
 
 * {
