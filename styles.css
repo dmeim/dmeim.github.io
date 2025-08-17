@@ -333,7 +333,7 @@ body {
     background: var(--primary-hover);
 }
 
-/* Tools Page */
+/* Utilities Page */
 .tools-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -367,8 +367,18 @@ body {
     margin-bottom: 1rem;
 }
 
+/* Tool Links Container */
+.tool-links {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+
 .tool-link {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 0.6rem 1.2rem;
     background: var(--primary-color);
     color: white;
@@ -377,10 +387,223 @@ body {
     font-weight: 500;
     transition: var(--transition);
     font-size: 0.9rem;
+    min-height: 38px;
 }
 
 .tool-link:hover {
     background: var(--primary-hover);
+}
+
+/* Site Link - Primary button */
+.site-link {
+    flex: 1;
+}
+
+/* Git Link - Icon only */
+.git-link {
+    padding: 0.6rem;
+    min-width: 38px;
+    flex-shrink: 0;
+}
+
+.git-icon {
+    width: 20px;
+    height: 20px;
+    display: block;
+    filter: brightness(0) invert(1); /* Makes icons white */
+}
+
+/* Tool Tags */
+.tool-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.tool-tag {
+    background: var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Filter Container */
+.filter-container {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.filter-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.filter-stats {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.item-count {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.clear-filters-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.clear-filters-btn:hover {
+    background: var(--primary-hover);
+}
+
+/* Tags Container */
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.tag-pill {
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tag-pill:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+.tag-pill.selected {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.tag-pill.selected:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+/* Active Filters */
+.active-filters {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+
+.active-filters-label {
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.active-filters-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.active-filter-tag {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.remove-tag-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.remove-tag-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Tool card animations */
+.tool-card {
+    transition: var(--transition), opacity 0.3s ease, transform 0.3s ease;
+}
+
+.tool-card.filtering-out {
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+/* Dark theme support for filter components */
+html[data-theme="dark"] .filter-container,
+body[data-theme="dark"] .filter-container {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+}
+
+html[data-theme="dark"] .tag-pill,
+body[data-theme="dark"] .tag-pill {
+    background: var(--bg-color);
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
+html[data-theme="dark"] .tool-tag,
+body[data-theme="dark"] .tool-tag {
+    background: var(--border-color);
+    color: var(--text-secondary);
 }
 
 /* Footer */
@@ -457,6 +680,31 @@ body {
     .tools-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
+    }
+
+    /* Filter responsive styles */
+    .filter-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .filter-stats {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .tags-container {
+        gap: 0.4rem;
+    }
+
+    .tag-pill {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .filter-container {
+        padding: 1rem;
     }
 }
 

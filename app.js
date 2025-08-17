@@ -1,3 +1,51 @@
+// Global variable to store tools data
+let TOOLS_DATA = [];
+
+// Async function to load utilities.json
+async function loadUtilitiesData() {
+    try {
+        const response = await fetch('./utilities.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        // Transform data to match expected format and add IDs
+        TOOLS_DATA = data.map((tool, index) => ({
+            id: index + 1,
+            name: tool.name,
+            category: getCategoryFromTags(tool.tags),
+            tags: tool.tags,
+            description: tool.description,
+            url_project: tool.url_project,
+            url_git: tool.url_git
+        }));
+        
+        console.log(`[App] Loaded ${TOOLS_DATA.length} tools from utilities.json`);
+        return TOOLS_DATA;
+    } catch (error) {
+        console.error('[App] Error loading utilities.json:', error);
+        // Fallback to empty array if loading fails
+        TOOLS_DATA = [];
+        return TOOLS_DATA;
+    }
+}
+
+// Helper function to determine category from tags
+function getCategoryFromTags(tags) {
+    if (tags.includes('vpn')) return 'VPN & Networking';
+    if (tags.includes('messaging') || tags.includes('chat')) return 'Communication';
+    if (tags.includes('password-manager')) return 'Password Management';
+    if (tags.includes('email')) return 'Email';
+    if (tags.includes('storage') || tags.includes('cloud')) return 'Storage & Sync';
+    if (tags.includes('browser')) return 'Browsers';
+    if (tags.includes('os')) return 'Operating Systems';
+    if (tags.includes('search-engine')) return 'Search';
+    if (tags.includes('adblock') || tags.includes('tracker-blocker')) return 'Browser Extensions';
+    if (tags.includes('email-alias')) return 'Email Privacy';
+    return 'Privacy & Security';
+}
+
 class ThemeManager {
     constructor() {
         this.debug = true; // Enable debug logging
@@ -49,6 +97,11 @@ class ThemeManager {
         
         // Update icon
         this.updateToggleIcon();
+        
+        // Update git icons if filter manager exists
+        if (window.toolsFilter) {
+            window.toolsFilter.updateGitIcons();
+        }
         
         this.log(`Theme applied successfully. Document data-theme: ${document.documentElement.getAttribute('data-theme')}`);
     }
@@ -143,6 +196,160 @@ class ThemeManager {
     }
 }
 
+class FilterManager {
+    constructor() {
+        this.selectedTags = new Set();
+        this.allTags = [];
+        this.filteredTools = [];
+        this.isLoaded = false;
+    }
+
+    async initialize() {
+        if (!this.isLoaded) {
+            await loadUtilitiesData();
+            this.allTags = this.extractAllTags();
+            this.filteredTools = [...TOOLS_DATA];
+            this.isLoaded = true;
+        }
+    }
+
+    extractAllTags() {
+        const tags = new Set();
+        TOOLS_DATA.forEach(tool => {
+            tool.tags.forEach(tag => tags.add(tag));
+        });
+        return Array.from(tags).sort();
+    }
+
+    toggleTag(tag) {
+        if (this.selectedTags.has(tag)) {
+            this.selectedTags.delete(tag);
+        } else {
+            this.selectedTags.add(tag);
+        }
+        this.updateFilteredTools();
+    }
+
+    clearAllFilters() {
+        this.selectedTags.clear();
+        this.updateFilteredTools();
+    }
+
+    updateFilteredTools() {
+        if (this.selectedTags.size === 0) {
+            this.filteredTools = [...TOOLS_DATA];
+        } else {
+            this.filteredTools = TOOLS_DATA.filter(tool => {
+                // AND logic: tool must have ALL selected tags
+                return Array.from(this.selectedTags).every(selectedTag => 
+                    tool.tags.includes(selectedTag)
+                );
+            });
+        }
+        this.renderFilteredTools();
+    }
+
+    renderFilterUI() {
+        const selectedTagsArray = Array.from(this.selectedTags);
+        
+        return `
+            <div class="filter-container">
+                <div class="filter-header">
+                    <h3 class="filter-title">Filter by tags:</h3>
+                    <div class="filter-stats">
+                        <span class="item-count">Showing ${this.filteredTools.length} of ${TOOLS_DATA.length} items</span>
+                        ${selectedTagsArray.length > 0 ? `<button class="clear-filters-btn" onclick="window.toolsFilter.clearAllFilters()">Clear all</button>` : ''}
+                    </div>
+                </div>
+                
+                <div class="tags-container">
+                    ${this.allTags.map(tag => `
+                        <button class="tag-pill ${this.selectedTags.has(tag) ? 'selected' : ''}" 
+                                onclick="window.toolsFilter.toggleTag('${tag}')">
+                            ${tag}
+                        </button>
+                    `).join('')}
+                </div>
+                
+                ${selectedTagsArray.length > 0 ? `
+                    <div class="active-filters">
+                        <span class="active-filters-label">Active filters:</span>
+                        <div class="active-filters-list">
+                            ${selectedTagsArray.map(tag => `
+                                <span class="active-filter-tag">
+                                    ${tag}
+                                    <button class="remove-tag-btn" onclick="window.toolsFilter.toggleTag('${tag}')">&times;</button>
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }
+
+    renderTools() {
+        return this.filteredTools.map(tool => `
+            <div class="tool-card" data-tags="${tool.tags.join(',')}">
+                <h3 class="tool-name">${tool.name}</h3>
+                <p class="tool-category">${tool.category}</p>
+                <p class="card-description">${tool.description}</p>
+                <div class="tool-tags">
+                    ${tool.tags.map(tag => `<span class="tool-tag">${tag}</span>`).join('')}
+                </div>
+                <div class="tool-links">
+                    <a href="${tool.url_project}" class="tool-link site-link" target="_blank" rel="noopener">
+                        Site
+                    </a>
+                    ${tool.url_git ? `
+                        <a href="${tool.url_git}" class="tool-link git-link" target="_blank" rel="noopener">
+                            <img src="${this.getGitIcon(tool.url_git)}" alt="Git Repository" class="git-icon">
+                        </a>
+                    ` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    getGitIcon(gitUrl) {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const isDark = currentTheme === 'dark';
+        
+        if (gitUrl.includes('github.com')) {
+            return isDark ? './resources/github-white.png' : './resources/github.png';
+        } else if (gitUrl.includes('gitlab')) {
+            return isDark ? './resources/gitlab-white.png' : './resources/gitlab.png';
+        } else {
+            return './resources/git.png';
+        }
+    }
+
+    renderFilteredTools() {
+        const toolsGrid = document.querySelector('.tools-grid');
+        if (toolsGrid) {
+            toolsGrid.innerHTML = this.renderTools();
+            
+            // Update filter stats
+            const itemCount = document.querySelector('.item-count');
+            if (itemCount) {
+                itemCount.textContent = `Showing ${this.filteredTools.length} of ${TOOLS_DATA.length} items`;
+            }
+        }
+    }
+
+    updateGitIcons() {
+        // Update all git icons when theme changes
+        const gitIcons = document.querySelectorAll('.git-icon');
+        gitIcons.forEach(icon => {
+            const gitLink = icon.closest('.git-link');
+            if (gitLink) {
+                const gitUrl = gitLink.href;
+                icon.src = this.getGitIcon(gitUrl);
+            }
+        });
+    }
+}
+
 class Router {
     constructor() {
         this.routes = {
@@ -176,10 +383,10 @@ class Router {
 
         // Navigation links
         navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
+            link.addEventListener('click', async (e) => {
                 e.preventDefault();
                 const page = link.getAttribute('data-page');
-                this.navigateTo(page);
+                await this.navigateTo(page);
                 
                 // Close mobile menu if open
                 navMenu.classList.remove('active');
@@ -194,21 +401,21 @@ class Router {
         });
     }
 
-    navigateTo(page) {
+    async navigateTo(page) {
         if (this.routes[page]) {
             this.currentPage = page;
             history.pushState({ page }, '', `#${page}`);
             this.updateActiveNav(page);
-            this.renderPage(page);
+            await this.renderPage(page);
         }
     }
 
-    handleRoute() {
+    async handleRoute() {
         const hash = window.location.hash.slice(1) || 'home';
         if (this.routes[hash]) {
             this.currentPage = hash;
             this.updateActiveNav(hash);
-            this.renderPage(hash);
+            await this.renderPage(hash);
         } else {
             this.navigateTo('home');
         }
@@ -224,8 +431,8 @@ class Router {
         });
     }
 
-    renderPage(page) {
-        const content = this.routes[page].call(this);
+    async renderPage(page) {
+        const content = await this.routes[page].call(this);
         const pageContent = document.getElementById('page-content');
         pageContent.innerHTML = content;
     }
@@ -254,11 +461,11 @@ class Router {
                     <a href="#profiles" class="card-link" data-page="profiles">My Profiles</a>
                 </div>
                 <div class="card">
-                    <h3 class="card-title">🛠️ Tools</h3>
+                    <h3 class="card-title">🛠️ Utilities</h3>
                     <p class="card-description">
-                        Quick access to useful tools and resources I recommend.
+                        Quick access to useful utilities I recommend.
                     </p>
-                    <a href="#tools" class="card-link" data-page="tools">Browse Tools</a>
+                    <a href="#tools" class="card-link" data-page="tools">Browse Utilities</a>
                 </div>
             </div>
         `;
@@ -314,27 +521,27 @@ class Router {
         `;
     }
 
-    renderTools() {
+    async renderTools() {
+        // Initialize filter manager if not already done
+        if (!window.toolsFilter) {
+            window.toolsFilter = new FilterManager();
+        }
+        
+        // Ensure data is loaded
+        await window.toolsFilter.initialize();
+        
         return `
             <div class="page-header">
-                <h1 class="page-title">Tools & Resources</h1>
+                <h1 class="page-title">Utilities</h1>
                 <p class="page-subtitle">
-                    Curated tools and resources I recommend for privacy, security, and development.
+                    Curated utilities I recommend for privacy, security, and development.
                 </p>
             </div>
+            
+            ${window.toolsFilter.renderFilterUI()}
+            
             <div class="tools-grid">
-                <div class="tool-card">
-                    <h3 class="tool-name">Mullvad VPN</h3>
-                    <p class="tool-category">Privacy & Security</p>
-                    <p class="card-description">
-                        Privacy-focused VPN service with strong encryption, no-logs policy, 
-                        and anonymous account creation. Perfect for maintaining online privacy 
-                        and security.
-                    </p>
-                    <a href="https://mullvad.net/en/download/vpn/" class="tool-link" target="_blank" rel="noopener">
-                        Download
-                    </a>
-                </div>
+                ${window.toolsFilter.renderTools()}
             </div>
         `;
     }

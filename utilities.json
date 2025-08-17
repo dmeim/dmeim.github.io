@@ -1,0 +1,261 @@
+[
+  {
+    "name": "Mullvad VPN",
+    "url_project": "https://mullvad.net",
+    "url_git": "https://github.com/mullvad",
+    "description": "A privacy-focused no-logs VPN provider based in Sweden with open-source clients.",
+    "tags": ["vpn", "privacy", "anonymity", "no-logs", "open-source", "secure", "multi-platform"]
+  },
+  {
+    "name": "Proton VPN",
+    "url_project": "https://protonvpn.com",
+    "url_git": "https://github.com/ProtonVPN",
+    "description": "Swiss-based secure VPN with a focus on privacy, encryption, and no-logs policy.",
+    "tags": ["vpn", "privacy", "secure", "swiss", "multi-platform", "no-logs"]
+  },
+  {
+    "name": "IVPN",
+    "url_project": "https://www.ivpn.net",
+    "url_git": "https://github.com/ivpn",
+    "description": "Privacy-first VPN service offering multi-hop connections and open-source clients.",
+    "tags": ["vpn", "privacy", "anonymity", "multi-hop", "open-source"]
+  },
+  {
+    "name": "Tor Browser",
+    "url_project": "https://www.torproject.org/download/",
+    "url_git": "https://github.com/torproject",
+    "description": "A browser designed for anonymity and censorship resistance using onion routing.",
+    "tags": ["anonymity", "onion", "browser", "privacy", "open-source", "censorship-resistance"]
+  },
+  {
+    "name": "I2P",
+    "url_project": "https://geti2p.net",
+    "url_git": "https://i2pgit.org/i2p-hackers/i2p.i2p",
+    "description": "The Invisible Internet Project, a decentralized anonymizing network layer.",
+    "tags": ["anonymity", "dark-net", "routing", "peer-to-peer", "privacy"]
+  },
+  {
+    "name": "Signal",
+    "url_project": "https://signal.org",
+    "url_git": "https://github.com/signalapp",
+    "description": "End-to-end encrypted secure messaging app with open-source clients.",
+    "tags": ["messaging", "end-to-end-encryption", "privacy", "secure", "open-source"]
+  },
+  {
+    "name": "Session",
+    "url_project": "https://getsession.org",
+    "url_git": "https://github.com/oxen-io/session-desktop",
+    "description": "Decentralized messaging app built on the Oxen network with onion routing.",
+    "tags": ["messaging", "decentralized", "onion-routing", "privacy", "secure"]
+  },
+  {
+    "name": "Element (Matrix)",
+    "url_project": "https://element.io",
+    "url_git": "https://github.com/vector-im",
+    "description": "Secure, decentralized Matrix-based chat platform supporting federation and E2EE.",
+    "tags": ["chat", "federation", "matrix", "privacy", "e2ee", "open-source"]
+  },
+  {
+    "name": "Briar",
+    "url_project": "https://briarproject.org",
+    "url_git": "https://code.briarproject.org/briar/briar",
+    "description": "Peer-to-peer messaging app designed for offline use and high privacy.",
+    "tags": ["messaging", "offline", "peer-to-peer", "secure", "open-source"]
+  },
+  {
+    "name": "Tailscale",
+    "url_project": "https://tailscale.com",
+    "url_git": "https://github.com/tailscale",
+    "description": "Zero-trust mesh VPN based on WireGuard, simple setup across devices.",
+    "tags": ["vpn", "mesh", "zero-trust", "networking", "wireguard", "easy-setup"]
+  },
+  {
+    "name": "Netbird",
+    "url_project": "https://netbird.io",
+    "url_git": "https://github.com/netbirdio",
+    "description": "Open-source mesh VPN built on WireGuard with zero-trust features.",
+    "tags": ["vpn", "mesh", "wireguard", "networking", "open-source", "zero-trust"]
+  },
+  {
+    "name": "ZeroTier",
+    "url_project": "https://www.zerotier.com",
+    "url_git": "https://github.com/zerotier",
+    "description": "Cross-platform SD-WAN and VPN with mesh networking capabilities.",
+    "tags": ["vpn", "mesh", "networking", "sdwan", "cross-platform"]
+  },
+  {
+    "name": "Headscale",
+    "url_project": "https://headscale.net",
+    "url_git": "https://github.com/juanfont/headscale",
+    "description": "Open-source self-hosted implementation of a Tailscale control server.",
+    "tags": ["vpn", "mesh", "wireguard", "self-hosted", "open-source", "zero-trust"]
+  },
+  {
+    "name": "Bitwarden",
+    "url_project": "https://bitwarden.com",
+    "url_git": "https://github.com/bitwarden",
+    "description": "Open-source password manager supporting cloud and self-hosted options.",
+    "tags": ["password-manager", "open-source", "cloud", "self-host", "secure"]
+  },
+  {
+    "name": "KeePassXC",
+    "url_project": "https://keepassxc.org",
+    "url_git": "https://github.com/keepassxreboot/keepassxc",
+    "description": "Cross-platform offline password manager with open-source code.",
+    "tags": ["password-manager", "offline", "open-source", "secure", "cross-platform"]
+  },
+  {
+    "name": "Proton Pass",
+    "url_project": "https://proton.me/pass",
+    "url_git": "https://github.com/ProtonMail",
+    "description": "Encrypted password manager by Proton with Swiss privacy protection.",
+    "tags": ["password-manager", "swiss", "encrypted", "cross-platform"]
+  },
+  {
+    "name": "1Password",
+    "url_project": "https://1password.com",
+    "url_git": "",
+    "description": "Commercial password manager with strong encryption and vault sharing.",
+    "tags": ["password-manager", "commercial", "secure", "vault"]
+  },
+  {
+    "name": "Proton Mail",
+    "url_project": "https://proton.me/mail",
+    "url_git": "https://github.com/ProtonMail",
+    "description": "Encrypted Swiss-based email service with strong privacy protections.",
+    "tags": ["email", "privacy", "swiss", "encrypted", "secure", "open-source"]
+  },
+  {
+    "name": "Tutanota",
+    "url_project": "https://tutanota.com",
+    "url_git": "https://github.com/tutao/tutanota",
+    "description": "Open-source encrypted email service based in Germany with calendar integration.",
+    "tags": ["email", "encrypted", "open-source", "privacy", "secure"]
+  },
+  {
+    "name": "Mailfence",
+    "url_project": "https://mailfence.com",
+    "url_git": "",
+    "description": "Belgium-based encrypted email service with integrated tools.",
+    "tags": ["email", "encrypted", "privacy", "secure", "belgium"]
+  },
+  {
+    "name": "Posteo",
+    "url_project": "https://posteo.de",
+    "url_git": "",
+    "description": "Green-hosted privacy-focused secure email provider in Germany.",
+    "tags": ["email", "green-hosting", "privacy", "secure"]
+  },
+  {
+    "name": "Nextcloud",
+    "url_project": "https://nextcloud.com",
+    "url_git": "https://github.com/nextcloud",
+    "description": "Self-hosted open-source cloud platform for file sync, sharing, and collaboration.",
+    "tags": ["cloud", "storage", "self-host", "sync", "privacy", "open-source"]
+  },
+  {
+    "name": "Syncthing",
+    "url_project": "https://syncthing.net",
+    "url_git": "https://github.com/syncthing",
+    "description": "Open-source decentralized peer-to-peer file synchronization tool.",
+    "tags": ["file-sync", "peer-to-peer", "open-source", "cross-platform", "privacy"]
+  },
+  {
+    "name": "Proton Drive",
+    "url_project": "https://proton.me/drive",
+    "url_git": "https://github.com/ProtonMail",
+    "description": "Encrypted Swiss cloud storage service provided by Proton.",
+    "tags": ["storage", "encrypted", "swiss", "cloud", "secure"]
+  },
+  {
+    "name": "Tresorit",
+    "url_project": "https://tresorit.com",
+    "url_git": "",
+    "description": "Commercial secure cloud storage service with end-to-end encryption.",
+    "tags": ["cloud", "storage", "secure", "encrypted", "privacy"]
+  },
+  {
+    "name": "SimpleLogin",
+    "url_project": "https://simplelogin.io",
+    "url_git": "https://github.com/simple-login",
+    "description": "Email alias and forwarding service for privacy protection.",
+    "tags": ["email-alias", "privacy", "open-source", "proton", "secure"]
+  },
+  {
+    "name": "AnonAddy",
+    "url_project": "https://anonaddy.com",
+    "url_git": "https://github.com/anonaddy",
+    "description": "Open-source anonymous email aliasing and forwarding service.",
+    "tags": ["email-alias", "privacy", "forwarding", "open-source"]
+  },
+  {
+    "name": "uBlock Origin",
+    "url_project": "https://ublockorigin.com",
+    "url_git": "https://github.com/gorhill/uBlock",
+    "description": "Lightweight and efficient open-source ad blocker.",
+    "tags": ["adblock", "privacy", "browser", "open-source", "security"]
+  },
+  {
+    "name": "Privacy Badger",
+    "url_project": "https://privacybadger.org",
+    "url_git": "https://github.com/EFForg/privacybadger",
+    "description": "Tracker-blocking browser extension developed by EFF.",
+    "tags": ["tracker-blocker", "browser", "privacy", "open-source"]
+  },
+  {
+    "name": "DuckDuckGo",
+    "url_project": "https://duckduckgo.com",
+    "url_git": "",
+    "description": "Privacy-focused search engine that doesn’t track users.",
+    "tags": ["search-engine", "privacy", "no-tracking", "browser"]
+  },
+  {
+    "name": "Startpage",
+    "url_project": "https://www.startpage.com",
+    "url_git": "",
+    "description": "Private search engine serving Google results anonymously.",
+    "tags": ["search-engine", "privacy", "google-results", "anonymous"]
+  },
+  {
+    "name": "SearXNG",
+    "url_project": "https://docs.searxng.org",
+    "url_git": "https://github.com/searxng/searxng",
+    "description": "Self-hostable open-source metasearch engine focused on privacy.",
+    "tags": ["meta-search", "open-source", "self-host", "privacy"]
+  },
+  {
+    "name": "LibreWolf",
+    "url_project": "https://librewolf.net",
+    "url_git": "https://gitlab.com/librewolf-community",
+    "description": "Hardened fork of Firefox focused on privacy and security.",
+    "tags": ["browser", "privacy", "hardened", "open-source"]
+  },
+  {
+    "name": "Qubes OS",
+    "url_project": "https://www.qubes-os.org",
+    "url_git": "https://github.com/QubesOS",
+    "description": "Security-focused Linux distribution that isolates apps using virtualization.",
+    "tags": ["os", "security", "virtualization", "privacy", "linux", "open-source"]
+  },
+  {
+    "name": "Tails OS",
+    "url_project": "https://tails.boum.org",
+    "url_git": "https://gitlab.tails.boum.org/tails",
+    "description": "Amnesic incognito live system focused on anonymity via Tor.",
+    "tags": ["os", "amnesic", "privacy", "anonymity", "tor", "linux"]
+  },
+  {
+    "name": "Whonix",
+    "url_project": "https://www.whonix.org",
+    "url_git": "https://github.com/Whonix",
+    "description": "Privacy-focused OS leveraging Tor for strong anonymity.",
+    "tags": ["os", "anonymity", "tor", "linux", "security"]
+  },
+  {
+    "name": "GrapheneOS",
+    "url_project": "https://grapheneos.org",
+    "url_git": "https://github.com/GrapheneOS",
+    "description": "Hardened Android-based open-source OS for Pixel devices.",
+    "tags": ["android", "hardened", "privacy", "open-source", "secure"]
+  }
+]
