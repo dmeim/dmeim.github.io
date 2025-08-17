@@ -292,7 +292,6 @@ class FilterManager {
         return this.filteredTools.map(tool => `
             <div class="tool-card" data-tags="${tool.tags.join(',')}">
                 <h3 class="tool-name">${tool.name}</h3>
-                <p class="tool-category">${tool.category}</p>
                 <p class="card-description">${tool.description}</p>
                 <div class="tool-tags">
                     ${tool.tags.map(tag => `<span class="tool-tag">${tag}</span>`).join('')}

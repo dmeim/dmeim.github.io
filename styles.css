@@ -247,8 +247,9 @@ body {
 
 .card-description {
     color: var(--text-secondary);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     line-height: 1.6;
+    flex-grow: 1;
 }
 
 .card-link {
@@ -336,7 +337,7 @@ body {
 /* Utilities Page */
 .tools-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
     margin-top: 2rem;
 }
@@ -348,6 +349,9 @@ body {
     padding: 1.5rem;
     transition: var(--transition);
     box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .tool-card:hover {
@@ -361,18 +365,13 @@ body {
     margin-bottom: 0.5rem;
 }
 
-.tool-category {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-}
 
 /* Tool Links Container */
 .tool-links {
     display: flex;
     gap: 0.5rem;
     align-items: center;
-    margin-top: 1rem;
+    margin-top: auto;
 }
 
 .tool-link {
@@ -676,9 +675,13 @@ body[data-theme="dark"] .tool-tag {
         gap: 1.5rem;
     }
 
-    .profiles-grid,
-    .tools-grid {
+    .profiles-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
     }
 
@@ -715,5 +718,9 @@ body[data-theme="dark"] .tool-tag {
 
     .card {
         padding: 1.5rem;
+    }
+
+    .tools-grid {
+        grid-template-columns: 1fr;
     }
 }
