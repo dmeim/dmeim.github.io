@@ -376,28 +376,42 @@ class Router {
     }
 
     setupNavigation() {
-        const navLinks = document.querySelectorAll('.nav-link');
         const navToggle = document.getElementById('nav-toggle');
         const navMenu = document.getElementById('nav-menu');
 
-        // Navigation links
-        navLinks.forEach(link => {
-            link.addEventListener('click', async (e) => {
-                e.preventDefault();
-                const page = link.getAttribute('data-page');
-                await this.navigateTo(page);
-                
-                // Close mobile menu if open
-                navMenu.classList.remove('active');
-                navToggle.classList.remove('active');
-            });
-        });
+        // Set up navigation for all links with data-page attribute
+        this.setupPageLinks();
 
         // Mobile menu toggle
         navToggle.addEventListener('click', () => {
             navMenu.classList.toggle('active');
             navToggle.classList.toggle('active');
         });
+    }
+
+    setupPageLinks() {
+        // Remove existing listeners to avoid duplicates
+        document.removeEventListener('click', this.handlePageLinkClick);
+        
+        // Add a single delegated event listener for all page navigation
+        this.handlePageLinkClick = async (e) => {
+            const target = e.target.closest('[data-page]');
+            if (target) {
+                e.preventDefault();
+                const page = target.getAttribute('data-page');
+                await this.navigateTo(page);
+                
+                // Close mobile menu if open
+                const navMenu = document.getElementById('nav-menu');
+                const navToggle = document.getElementById('nav-toggle');
+                if (navMenu && navToggle) {
+                    navMenu.classList.remove('active');
+                    navToggle.classList.remove('active');
+                }
+            }
+        };
+        
+        document.addEventListener('click', this.handlePageLinkClick);
     }
 
     async navigateTo(page) {
@@ -434,6 +448,9 @@ class Router {
         const content = await this.routes[page].call(this);
         const pageContent = document.getElementById('page-content');
         pageContent.innerHTML = content;
+        
+        // Re-setup page links after content changes
+        this.setupPageLinks();
     }
 
     renderHome() {
