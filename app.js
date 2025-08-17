@@ -281,6 +281,7 @@ class FilterManager {
         }
         
         this.filteredTools = filtered;
+        this.refreshFilterUI();
         this.renderFilteredTools();
     }
 
@@ -374,6 +375,24 @@ class FilterManager {
             return isDark ? './resources/gitlab-white.png' : './resources/gitlab.png';
         } else {
             return './resources/git.png';
+        }
+    }
+
+    refreshFilterUI() {
+        // Re-render the entire filter UI to show updated tag chips
+        const filterContainer = document.querySelector('.filter-container');
+        if (filterContainer) {
+            // Store current search input value to preserve it
+            const currentSearchValue = this.searchQuery;
+            
+            // Re-render the filter UI
+            filterContainer.outerHTML = this.renderFilterUI();
+            
+            // Restore search input value if it exists
+            const searchInput = document.getElementById('search-input');
+            if (searchInput && currentSearchValue) {
+                searchInput.value = currentSearchValue;
+            }
         }
     }
 
