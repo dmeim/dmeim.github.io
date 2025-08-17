@@ -1,8 +1,67 @@
+class ThemeManager {
+    constructor() {
+        this.theme = this.getInitialTheme();
+        this.init();
+    }
+
+    getInitialTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            return savedTheme;
+        }
+        
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    init() {
+        this.applyTheme(this.theme);
+        this.setupToggle();
+        this.setupMediaQuery();
+    }
+
+    applyTheme(theme) {
+        this.theme = theme;
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        this.updateToggleIcon();
+    }
+
+    updateToggleIcon() {
+        const themeIcon = document.querySelector('.theme-icon');
+        if (themeIcon) {
+            themeIcon.textContent = this.theme === 'dark' ? '☀️' : '🌙';
+        }
+    }
+
+    setupToggle() {
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                this.toggleTheme();
+            });
+        }
+    }
+
+    setupMediaQuery() {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        mediaQuery.addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                this.applyTheme(e.matches ? 'dark' : 'light');
+            }
+        });
+    }
+
+    toggleTheme() {
+        const newTheme = this.theme === 'dark' ? 'light' : 'dark';
+        this.applyTheme(newTheme);
+    }
+}
+
 class Router {
     constructor() {
         this.routes = {
             'home': this.renderHome,
-            'repos': this.renderRepos,
+            'projects': this.renderProjects,
             'profiles': this.renderProfiles,
             'tools': this.renderTools
         };
@@ -99,7 +158,7 @@ class Router {
                     <p class="card-description">
                         Explore my latest projects and contributions to the open-source community.
                     </p>
-                    <a href="#repos" class="card-link" data-page="repos">View Projects</a>
+                    <a href="#projects" class="card-link" data-page="projects">View Projects</a>
                 </div>
                 <div class="card">
                     <h3 class="card-title">🔗 Connect</h3>
@@ -119,7 +178,7 @@ class Router {
         `;
     }
 
-    renderRepos() {
+    renderProjects() {
         return `
             <div class="page-header">
                 <h1 class="page-title">Projects</h1>
@@ -221,6 +280,7 @@ class Router {
 
 // Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    new ThemeManager();
     new Router();
 });
 
