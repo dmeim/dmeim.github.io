@@ -285,13 +285,6 @@ class Router {
                         View on GitHub →
                     </a>
                 </div>
-                <div class="card">
-                    <h3 class="card-title">More Projects Coming Soon</h3>
-                    <p class="card-description">
-                        I'm always working on new projects and contributions. Check back soon 
-                        for updates on my latest work in privacy, security, and developer tools.
-                    </p>
-                </div>
             </div>
         `;
     }
@@ -317,15 +310,6 @@ class Router {
                         Visit Profile
                     </a>
                 </div>
-                <div class="profile-card">
-                    <div class="profile-icon">
-                        <span>🔗</span>
-                    </div>
-                    <h3 class="profile-name">More Links</h3>
-                    <p class="profile-description">
-                        Additional social profiles and professional networks coming soon.
-                    </p>
-                </div>
             </div>
         `;
     }
@@ -350,14 +334,6 @@ class Router {
                     <a href="https://mullvad.net/en/download/vpn/" class="tool-link" target="_blank" rel="noopener">
                         Download
                     </a>
-                </div>
-                <div class="tool-card">
-                    <h3 class="tool-name">More Tools</h3>
-                    <p class="tool-category">Coming Soon</p>
-                    <p class="card-description">
-                        Additional privacy tools, development utilities, and security resources 
-                        will be added here soon.
-                    </p>
                 </div>
             </div>
         `;
