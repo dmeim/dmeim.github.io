@@ -201,6 +201,7 @@ class FilterManager {
         this.selectedTags = new Set();
         this.allTags = [];
         this.filteredTools = [];
+        this.searchQuery = '';
         this.isLoaded = false;
     }
 
@@ -230,50 +231,103 @@ class FilterManager {
         this.updateFilteredTools();
     }
 
+    addTag(tag) {
+        if (tag && !this.selectedTags.has(tag)) {
+            this.selectedTags.add(tag);
+            this.updateFilteredTools();
+            // Reset dropdown to default
+            const dropdown = document.getElementById('tag-dropdown');
+            if (dropdown) {
+                dropdown.value = '';
+            }
+        }
+    }
+
+    updateSearchQuery(query) {
+        this.searchQuery = query.toLowerCase().trim();
+        this.updateFilteredTools();
+    }
+
     clearAllFilters() {
         this.selectedTags.clear();
+        this.searchQuery = '';
+        const searchInput = document.getElementById('search-input');
+        const dropdown = document.getElementById('tag-dropdown');
+        if (searchInput) searchInput.value = '';
+        if (dropdown) dropdown.value = '';
         this.updateFilteredTools();
     }
 
     updateFilteredTools() {
-        if (this.selectedTags.size === 0) {
-            this.filteredTools = [...TOOLS_DATA];
-        } else {
-            this.filteredTools = TOOLS_DATA.filter(tool => {
+        let filtered = [...TOOLS_DATA];
+        
+        // Apply tag filtering
+        if (this.selectedTags.size > 0) {
+            filtered = filtered.filter(tool => {
                 // AND logic: tool must have ALL selected tags
                 return Array.from(this.selectedTags).every(selectedTag => 
                     tool.tags.includes(selectedTag)
                 );
             });
         }
+        
+        // Apply search filtering
+        if (this.searchQuery) {
+            filtered = filtered.filter(tool => {
+                const nameMatch = tool.name.toLowerCase().includes(this.searchQuery);
+                const descriptionMatch = tool.description.toLowerCase().includes(this.searchQuery);
+                return nameMatch || descriptionMatch;
+            });
+        }
+        
+        this.filteredTools = filtered;
         this.renderFilteredTools();
     }
 
     renderFilterUI() {
         const selectedTagsArray = Array.from(this.selectedTags);
+        const availableTags = this.allTags.filter(tag => !this.selectedTags.has(tag));
         
         return `
             <div class="filter-container">
                 <div class="filter-header">
-                    <h3 class="filter-title">Filter by tags:</h3>
+                    <h3 class="filter-title">Search and Filter Utilities</h3>
                     <div class="filter-stats">
                         <span class="item-count">Showing ${this.filteredTools.length} of ${TOOLS_DATA.length} items</span>
-                        ${selectedTagsArray.length > 0 ? `<button class="clear-filters-btn" onclick="window.toolsFilter.clearAllFilters()">Clear all</button>` : ''}
+                        ${selectedTagsArray.length > 0 || this.searchQuery ? `<button class="clear-filters-btn" onclick="window.toolsFilter.clearAllFilters()">Clear all</button>` : ''}
                     </div>
                 </div>
                 
-                <div class="tags-container">
-                    ${this.allTags.map(tag => `
-                        <button class="tag-pill ${this.selectedTags.has(tag) ? 'selected' : ''}" 
-                                onclick="window.toolsFilter.toggleTag('${tag}')">
-                            ${tag}
-                        </button>
-                    `).join('')}
+                <div class="search-and-tags">
+                    <div class="search-container">
+                        <input type="text" 
+                               id="search-input" 
+                               class="search-input" 
+                               placeholder="Search utilities by name or description..."
+                               value="${this.searchQuery}"
+                               oninput="window.toolsFilter.updateSearchQuery(this.value)">
+                        ${this.searchQuery ? `<button class="clear-search-btn" onclick="document.getElementById('search-input').value=''; window.toolsFilter.updateSearchQuery('')">&times;</button>` : ''}
+                    </div>
+                    
+                    <div class="tag-selector">
+                        <select id="tag-dropdown" class="tag-dropdown">
+                            <option value="">Select a tag to add...</option>
+                            ${availableTags.map(tag => `
+                                <option value="${tag}">${tag}</option>
+                            `).join('')}
+                        </select>
+                        <button class="add-tag-btn" onclick="
+                            const dropdown = document.getElementById('tag-dropdown');
+                            if (dropdown.value) {
+                                window.toolsFilter.addTag(dropdown.value);
+                            }
+                        ">Add Tag</button>
+                    </div>
                 </div>
                 
                 ${selectedTagsArray.length > 0 ? `
                     <div class="active-filters">
-                        <span class="active-filters-label">Active filters:</span>
+                        <span class="active-filters-label">Selected tags:</span>
                         <div class="active-filters-list">
                             ${selectedTagsArray.map(tag => `
                                 <span class="active-filter-tag">
